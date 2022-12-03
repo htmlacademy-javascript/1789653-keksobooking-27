@@ -1,20 +1,18 @@
 import { getRandomNumber, getRandomNumberFloat, getRandomArrayElement } from './util.js';
 
-const NUMBER_OFFERS = 10;
-
-const Location = {
+const LOCATIONS = {
   MIN_LAT: 35.65,
   MAX_LAT: 35.7,
   MIN_LNG: 139.7,
   MAX_LNG: 139.8,
 };
 
-const Price = {
+const PRICE = {
   MIN: 0,
   MAX: 100000,
 };
 
-const titles = [
+const TITLES = [
   'Стандартная квартира в центре города',
   'Прекрасный вид из окна на городской парк',
   'Рядом с домом большое количество кафе',
@@ -33,11 +31,21 @@ const titles = [
   'Небольшая бюджетная квартира для студентов',
 ];
 
-const types = ['palace', 'flat', 'house', 'bungalow', 'hotel'];
+const TYPES = [
+  'palace',
+  'flat',
+  'house',
+  'bungalow',
+  'hotel'
+];
 
-const times = ['12:00', '13:00', '14:00'];
+const TIMES = [
+  '12:00',
+  '13:00',
+  '14:00'
+];
 
-const features = [
+const FEATURES = [
   'wifi',
   'dishwasher',
   'parking',
@@ -46,7 +54,7 @@ const features = [
   'conditioner',
 ];
 
-const description = [
+const DESCRIPTION = [
   'На первом этаже дома располагается хорошая пекарня с очень вкусными крендельками',
   'Рядом с домом находится ЖД депо каждое утро примерно в четыре утра из него выезжает состав с тремя вагонами в одном из них постоянно перекатываются трубы с характерным звуком',
   'Удачное расположение дома в центре города, до метро не более пяти минут пешком',
@@ -64,50 +72,58 @@ const description = [
   'Маленький бокс чисто для переночевать и привести себя в порядок',
 ];
 
-const photos = [
+const PHOTOS = [
   'https://assets.htmlacademy.ru/content/intensive/javascript-1/keksobooking/duonguyen-8LrGtIxxa4w.jpg',
   'https://assets.htmlacademy.ru/content/intensive/javascript-1/keksobooking/brandon-hoogenboom-SNxQGWxZQi0.jpg',
   'https://assets.htmlacademy.ru/content/intensive/javascript-1/keksobooking/claire-rendall-b6kAwr1i0Iw.jpg',
 ];
 
-const getRandomLatitude = () =>
-  getRandomNumberFloat(Location.MIN_LAT, Location.MAX_LAT, 5);
-
-const getRandomLongitude = () =>
-  getRandomNumberFloat(Location.MAX_LNG, Location.MAX_LNG, 5);
-
-const createAuthorData = (index) => ({
-  avatar: `img/avatars/user${index.toString().padStart(2, '0')}.png`,
+const createAuthorData = (id) => ({
+  avatar: `img/avatars/user${id.toString().padStart(2, '0')}.png`,
 });
 
-const createOfferData = () => ({
-  title: getRandomArrayElement(titles),
-  address: `${getRandomLatitude()}, ${getRandomLongitude()}`,
-  price: getRandomNumber(Price.MIN, Price.MAX),
-  type: getRandomArrayElement(types),
-  rooms: getRandomNumber(1, 3),
-  guests: getRandomNumber(1, 3),
-  checkin: getRandomArrayElement(times),
-  checkout: getRandomArrayElement(times),
-  features: features.slice(0, getRandomNumber(0, features.length)),
-  description: getRandomArrayElement(description),
-  photos: Array.from({ length: getRandomNumber(0, 10) }, () =>
-    getRandomArrayElement(photos)
-  ),
-});
+const createOfferData = (id) => {
+  const location = {
+    lat: getRandomNumberFloat(LOCATIONS.MIN_LAT, LOCATIONS.MAX_LAT, 5),
+    lng: getRandomNumberFloat(LOCATIONS.MAX_LNG, LOCATIONS.MAX_LNG, 5),
+  };
 
-const createLocationData = () => ({
-  lat: getRandomLatitude(),
-  lng: getRandomLongitude(),
-});
+  const times = {
+    time: getRandomArrayElement(TIMES),
+  };
 
-const createOffer = (index) => ({
-  author: createAuthorData(index),
-  offer: createOfferData(),
-  location: createLocationData(),
-});
+  return {
+    author: {
+      avatar: createAuthorData(id),
+    },
 
-const getOffers = () =>
-  Array.from({ length: NUMBER_OFFERS }, (_, offerIndex) => createOffer(offerIndex + 1));
+    offer: {
+      title: getRandomArrayElement(TITLES),
+      address: `${location.lat}, ${location.lng}`,
+      price: getRandomNumber(PRICE.MIN, PRICE.MAX),
+      type: getRandomArrayElement(TYPES),
+      rooms: getRandomNumber(1, 3),
+      guests: getRandomNumber(1, 3),
+      checkin: times,
+      checkout: times,
+      features: FEATURES.slice(0, getRandomNumber(0, FEATURES.length)),
+      description: getRandomArrayElement(DESCRIPTION),
+      photos: Array.from({ length: getRandomNumber(0, 3) }, () =>
+        getRandomArrayElement(PHOTOS)
+      )
+    },
 
-export { getOffers };
+    location: location,
+  };
+};
+
+const countOffer = (count) => {
+  const offers = [];
+
+  for (let i = 1; i <= count; i++) {
+    offers.push(createOfferData(i));
+  }
+  return offers;
+};
+
+export { countOffer };
