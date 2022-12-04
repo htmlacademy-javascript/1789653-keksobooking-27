@@ -1,5 +1,7 @@
 import { getRandomNumber, getRandomNumberFloat, getRandomArrayElement } from './util.js';
 
+const NUMBER_OFFERS = 10;
+
 const LOCATIONS = {
   MIN_LAT: 35.65,
   MAX_LAT: 35.7,
@@ -78,10 +80,6 @@ const PHOTOS = [
   'https://assets.htmlacademy.ru/content/intensive/javascript-1/keksobooking/claire-rendall-b6kAwr1i0Iw.jpg',
 ];
 
-const createAuthorData = (id) => ({
-  avatar: `img/avatars/user${id.toString().padStart(2, '0')}.png`,
-});
-
 const createOfferData = (id) => {
   const location = {
     lat: getRandomNumberFloat(LOCATIONS.MIN_LAT, LOCATIONS.MAX_LAT, 5),
@@ -94,7 +92,7 @@ const createOfferData = (id) => {
 
   return {
     author: {
-      avatar: createAuthorData(id),
+      avatar: `img/avatars/user${id.toString().padStart(2, '0')}.png`,
     },
 
     offer: {
@@ -108,9 +106,9 @@ const createOfferData = (id) => {
       checkout: times,
       features: FEATURES.slice(0, getRandomNumber(0, FEATURES.length)),
       description: getRandomArrayElement(DESCRIPTION),
-      photos: Array.from({ length: getRandomNumber(0, 3) }, () =>
-        getRandomArrayElement(PHOTOS)
-      )
+      photos: PHOTOS.slice(0, getRandomNumber(0, PHOTOS.length),
+        Array.from(PHOTOS.filter((item, end) => end === PHOTOS.lastIndexOf(item)),
+        ))
     },
 
     location: location,
@@ -126,4 +124,6 @@ const countOffer = (count) => {
   return offers;
 };
 
-export { countOffer };
+const countOffers = () => countOffer(NUMBER_OFFERS);
+
+export { countOffers };

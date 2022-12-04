@@ -1,4 +1,3 @@
-import { countOffer } from './data.js';
-const NUMBER_OFFERS = 10;
+import { canvasMap } from './card.js';
 
-countOffer(NUMBER_OFFERS);
+canvasMap();
