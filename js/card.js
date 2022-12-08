@@ -1,6 +1,7 @@
 import { countOffers } from './data.js';
 import { getRandomArrayElement } from './util.js';
-import { toggleFormActive } from './form.js'; //
+// import { toggleFormActive } from './form.js'; //
+import './validation.js';
 
 const offerTypes = {
   flat: 'Квартира',
@@ -25,7 +26,7 @@ const getCardList = ({ author, offer }) => {
   getCardItem.querySelector('.popup__text--price').textContent = `${offer.price} ₽/ночь`;
   getCardItem.querySelector('.popup__type').textContent = offerTypes[offer.type];
   getCardItem.querySelector('.popup__text--capacity').textContent = `${offer.rooms} комнаты для ${offer.guests} гостей.`;
-  getCardItem.querySelector('.popup__text--time').textContent = `Заезд после ${offer.checkin.time}, выезд до ${offer.checkout.time}`;
+  getCardItem.querySelector('.popup__text--time').textContent = `Заезд после ${offer.checkin}, выезд до ${offer.checkout}`;
   getCardItem.querySelector('.popup__description').textContent = offer.description;
   getCardItem.querySelector('.popup__avatar').src = author.avatar;
 
@@ -55,6 +56,6 @@ const getCardList = ({ author, offer }) => {
 
 const canvasMap = () => mapCanvas.append(getCardList(getRandomArrayElement(adsList)));
 
-toggleFormActive(); //
+// toggleFormActive(); //
 
 export { getCardList, canvasMap };

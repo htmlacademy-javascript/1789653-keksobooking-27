@@ -38,13 +38,13 @@ const TYPES = [
   'flat',
   'house',
   'bungalow',
-  'hotel'
+  'hotel',
 ];
 
 const TIMES = [
   '12:00',
   '13:00',
-  '14:00'
+  '14:00',
 ];
 
 const FEATURES = [
@@ -86,10 +86,6 @@ const createOfferData = (id) => {
     lng: getRandomNumberFloat(LOCATIONS.MAX_LNG, LOCATIONS.MAX_LNG, 5),
   };
 
-  const times = {
-    time: getRandomArrayElement(TIMES),
-  };
-
   return {
     author: {
       avatar: `img/avatars/user${id.toString().padStart(2, '0')}.png`,
@@ -102,8 +98,8 @@ const createOfferData = (id) => {
       type: getRandomArrayElement(TYPES),
       rooms: getRandomNumber(1, 3),
       guests: getRandomNumber(1, 3),
-      checkin: times,
-      checkout: times,
+      checkin: getRandomArrayElement(TIMES),
+      checkout: getRandomArrayElement(TIMES),
       features: FEATURES.slice(0, getRandomNumber(0, FEATURES.length)),
       description: getRandomArrayElement(DESCRIPTION),
       photos: PHOTOS.slice(0, getRandomNumber(0, PHOTOS.length),
