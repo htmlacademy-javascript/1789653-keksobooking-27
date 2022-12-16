@@ -1,7 +1,5 @@
 import { getRandomNumber, getRandomNumberFloat, getRandomArrayElement } from './util.js';
 
-const NUMBER_OFFERS = 10;
-
 const LOCATIONS = {
   MIN_LAT: 35.65,
   MAX_LAT: 35.7,
@@ -111,7 +109,7 @@ const createOfferData = (id) => {
   };
 };
 
-const countOffer = (count) => {
+const countOffers = (count) => {
   const offers = [];
 
   for (let i = 1; i <= count; i++) {
@@ -119,7 +117,5 @@ const countOffer = (count) => {
   }
   return offers;
 };
-
-const countOffers = () => countOffer(NUMBER_OFFERS);
 
 export { countOffers };

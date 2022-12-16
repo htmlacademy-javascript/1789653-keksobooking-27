@@ -1,26 +1,35 @@
-const toggleFormActive = (active) => {
-  const adForm = document.querySelector('.ad-form');
-  const mapForm = document.querySelector('.map__filters');
+const FLOAT_COORDINATE = 5;
 
-  adForm.querySelectorAll('fieldset').forEach((item) => {
-    item.disabled = !active;
+const toggleFormActive = (forms, active) => {
+  forms.forEach(({ element, classDisablebed }) => {
+    if (!active) {
+      element.classList.add(classDisablebed);
+    } else {
+      element.classList.remove(classDisablebed);
+    }
+    Array.from(element.children)
+      .forEach((item) => {
+        item.disabled = !active;
+      });
   });
-
-  mapForm.querySelectorAll('fieldset').forEach((item) => {
-    item.disabled = !active;
-  });
-
-  mapForm.querySelectorAll('select').forEach((item) => {
-    item.disabled = !active;
-  });
-
-  if (!active) {
-    adForm.classList.add('ad-form--disabled');
-    mapForm.classList.add('map__filters--disabled');
-  } else {
-    adForm.classList.remove('ad-form--disabled');
-    mapForm.classList.remove('map__filter--disabled');
-  }
 };
 
-export { toggleFormActive };
+const setActiveAdForm = (active) => {
+  toggleFormActive([
+    {
+      element: document.querySelector('.ad-form'),
+      classDisabled: 'ad-form--disabled',
+    },
+    {
+      element: document.querySelector('.map__filters'),
+      classDisablebed: 'map__filters--disabled',
+    },
+  ], active);
+};
+
+const getAddress = (addressElement, { lat, lng }) => {
+  addressElement.value = `${lat.toFixed(FLOAT_COORDINATE)} ${lng.toFixed(FLOAT_COORDINATE)}`;
+  addressElement.disabled = true;
+};
+
+export { setActiveAdForm, getAddress };
