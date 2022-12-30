@@ -11,10 +11,10 @@ const TYPES_TO_PRICES = {
   max: 100000,
 };
 
-const adForm = document.querySelector('.ad-form');
-const typeElement = adForm.querySelector('#type');
-const priceElement = adForm.querySelector('#price');
-const sliderElement = document.querySelector('.ad-form__slider');
+const adFormElement = document.querySelector('.ad-form');
+const typeElement = adFormElement.querySelector('#type');
+const priceElement = adFormElement.querySelector('#price');
+const sliderElement = adFormElement.querySelector('.ad-form__slider');
 
 noUiSlider.create(sliderElement, {
   start: TYPES_TO_PRICES[typeElement.value],
@@ -43,3 +43,9 @@ typeElement.addEventListener('change', () => {
     start: TYPES_TO_PRICES[typeElement.value],
   });
 });
+
+const resetSlider = () => {
+  sliderElement.noUiSlider.reset();
+};
+
+export { resetSlider };

@@ -7,7 +7,8 @@ const offerTypes = {
 };
 
 const cardTemplate = document.querySelector('#card')
-  .content.querySelector('.popup');
+  .content
+  .querySelector('.popup');
 
 const getCardList = ({ offer, author }) => {
   const getCardItem = cardTemplate.cloneNode(true);
@@ -21,10 +22,9 @@ const getCardList = ({ offer, author }) => {
   getCardItem.querySelector('.popup__avatar').src = author.avatar;
 
   const popupDescription = getCardItem.querySelector('.popup__description');
+
   if (offer.description) {
     popupDescription.textContent = offer.description;
-  } else {
-    popupDescription.remove();
   }
 
   if (offer.features && offer.features.length) {

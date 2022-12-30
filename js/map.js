@@ -1,58 +1,94 @@
 import { getCardList } from './card.js';
-import { setActiveAdForm, getAddress } from './form.js';
 
 const ZOOM = 10;
 
-const pinIcon = L.icon({
-  iconUrl: './img/pin.svg',
-  iconSize: [40, 40],
-  iconAnchor: [20, 40],
-});
+const DEFAYLT_PIN_PATH = './img/pin.svg';
+const DEFAYLT_PIN_ICON_SIZE = [40, 40];
+const DEFAULT_PIT_ANCHOR_SIZE = [20, 40];
 
-const mainPinIcon = L.icon({
-  iconUrl: './img/main-pin.svg',
-  iconSize: [52, 52],
-  iconAnchor: [26, 52],
-});
+const MAIN_PIN_PATH = './img/main-pin.svg';
+const MAIN_PIN_ICON_SIZE = [52, 52];
+const MAIN_PIN_ANCHOR_SIZE = [26, 52];
 
-const createMarker = (offers, markerGrop) => {
+const TILE_LAYER_LINK = 'https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png';
+const TILE_LAYER_ATTRIBUTION = '&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors';
+
+const IconType = {
+  MAIN: 'main',
+  DEFAULT: 'default',
+};
+
+const createPinMarcer = (iconType) => {
+  switch (iconType) {
+    case (IconType.DEFAULT):
+      return L.icon({
+        iconUrl: DEFAYLT_PIN_PATH,
+        iconSize: DEFAYLT_PIN_ICON_SIZE,
+        iconAnchor: DEFAULT_PIT_ANCHOR_SIZE,
+      });
+    case (IconType.MAIN):
+      return L.icon({
+        iconUrl: MAIN_PIN_PATH,
+        iconSize: MAIN_PIN_ICON_SIZE,
+        iconAnchor: MAIN_PIN_ANCHOR_SIZE,
+      });
+
+    default:
+      throw new Error('Неизвестный тип значка pin-кода');
+  }
+};
+
+const createMarker = (location, iconType, isDraggable = false) => {
+  const { lat, lng } = location;
+  return L.marker(
+    { lat, lng },
+    {
+      icon: createPinMarcer(iconType),
+      draggable: isDraggable,
+    },
+  );
+};
+
+const removeMarkers = (map) => {
+  map.eachLayer((layer) => {
+    const { options } = layer;
+    const { icon } = options;
+    if (icon && icon.options.iconUrl === DEFAYLT_PIN_PATH) {
+      layer.remove();
+    }
+  });
+};
+
+const renderMarkers = (map, offers) => {
+  removeMarkers(map);
   offers.forEach((offer) => {
     const cardElement = getCardList(offer);
-    const marker = L.marker(
-      { lat: offer.location.lat, lng: offer.location.lng },
-      { icon: pinIcon },
-    );
-    marker
-      .addTo(markerGrop)
+    createMarker(offer.location, IconType.DEFAULT)
+      .addTo(map)
       .bindPopup(cardElement);
   });
 };
 
-const displayMap = (mapElement, addressElement, coordinates) => {
+const displayMap = (mapElement, coordinates, onLoadMap, onPinMoveEnd) => {
   const map = L.map(mapElement)
-    .on('load', () => {
-      getAddress(addressElement, coordinates);
-      setActiveAdForm(true);
-    })
+    .on('load', onLoadMap)
     .setView(coordinates, ZOOM);
 
-  L.tileLayer(
-    'https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png',
-    {
-      attribution: '&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors',
-    },
-  ).addTo(map);
+  L.tileLayer(TILE_LAYER_LINK, { attribution: TILE_LAYER_ATTRIBUTION })
+    .addTo(map);
 
-  const mainPinMarker = L.marker(
-    coordinates, { draggable: true, icon: mainPinIcon, }
-  );
-  const markerGroup = L.layerGroup().addTo(map);
-  mainPinMarker.addTo(markerGroup);
+  const mainMarkerGroup = L
+    .layerGroup()
+    .addTo(map);
 
-  mainPinMarker.on('moveend', ({target}) => {
-    getAddress(addressElement, target.getLatLng());
-  });
-  return map;
+  const mainPinMarker = createMarker(coordinates, IconType.MAIN, true);
+  mainPinMarker.addTo(mainMarkerGroup);
+  mainPinMarker.on('moveend', onPinMoveEnd);
+
+  return {
+    map,
+    mainPinMarker,
+  };
 };
 
-export { displayMap, createMarker };
+export { renderMarkers, displayMap };
