@@ -12,6 +12,7 @@ const addressElement = adFormElement.querySelector('#address');
 const submitButton = adFormElement.querySelector('.ad-form__submit');
 const resetButton = adFormElement.querySelector('.ad-form__reset');
 
+
 const blockSubmitButton = () => {
   submitButton.disabled = true;
   submitButton.textContent = 'Опубликовываю...';
@@ -69,6 +70,7 @@ const initForm = (clearMapCb, validateFormCb) => {
     catch (error) {
       showError(error.message);
     }
+
     unBlockSubmitButton();
   });
 };

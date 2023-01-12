@@ -55,9 +55,6 @@ const onCapacityChange = () => {
 };
 
 const onTypeChange = () => {
-  const minPrice = TYPES_TO_PRICES[typeElement.value];
-  priceElement.placeholder = minPrice;
-  priceElement.min = minPrice;
   pristine.validate(priceElement);
 };
 

@@ -16,8 +16,11 @@ const typeElement = adFormElement.querySelector('#type');
 const priceElement = adFormElement.querySelector('#price');
 const sliderElement = adFormElement.querySelector('.ad-form__slider');
 
+const getNumberPrice = () =>
+  parseFloat(TYPES_TO_PRICES[typeElement.value]);
+
 noUiSlider.create(sliderElement, {
-  start: TYPES_TO_PRICES[typeElement.value],
+  start: getNumberPrice(),
   step: STEP,
   connect: 'lower',
   range: {
@@ -34,18 +37,31 @@ sliderElement.noUiSlider.on('update', () => {
   priceElement.value = sliderElement.noUiSlider.get();
 });
 
-typeElement.addEventListener('change', () => {
-  sliderElement.noUiSlider.updateOptions({
-    range: {
-      min: MIN,
-      max: MAX,
-    },
-    start: TYPES_TO_PRICES[typeElement.value],
-  });
-});
-
 const resetSlider = () => {
   sliderElement.noUiSlider.reset();
 };
 
-export { resetSlider };
+const priceChangeElement = () => {
+  priceElement.placeholder = TYPES_TO_PRICES[typeElement.value];
+};
+
+const priceInputElement = () => {
+  priceElement.addEventListener('input', (evt) => {
+    sliderElement.noUiSlider.updateOptions({
+      start: evt.target.value || getNumberPrice(),
+      range: {
+        min: getNumberPrice(),
+        max: MAX,
+      },
+    });
+
+    if (priceElement.value === '') {
+      priceChangeElement();
+      typeElement.addEventListener('change', () => {
+        priceChangeElement();
+      });
+    }
+  });
+};
+
+export { resetSlider, priceInputElement };

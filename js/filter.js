@@ -3,6 +3,18 @@ import { debounce, toggleFormActive } from './util.js';
 const NUMBER_OFFERS = 10;
 const DEFAULT_VALUE = 'any';
 
+const PRICE_TYPE = {
+  ANY: 'any',
+  LOW: 'low',
+  MIDDLE: 'middle',
+  HIGH: 'high',
+};
+
+const PRICE_VALUE = {
+  MIDDLE: 10000,
+  HIGH: 50000,
+};
+
 const filterMapElement = document.querySelector('.map__filters');
 const typeFilterElement = filterMapElement.querySelector('#housing-type');
 const priceFilterElement = filterMapElement.querySelector('#housing-price');
@@ -10,31 +22,19 @@ const roomsFilterElement = filterMapElement.querySelector('#housing-rooms');
 const guestsFilterElement = filterMapElement.querySelector('#housing-guests');
 const featuresFilterElement = filterMapElement.querySelectorAll('.map__checkbox');
 
-const PriceType = {
-  ANY: 'any',
-  LOW: 'low',
-  MIDDLE: 'middle',
-  HIGH: 'high',
-};
-
-const PriceValue = {
-  MIDDLE: 10000,
-  HIGH: 50000,
-};
-
 const filterByType = ({ offer }, selectedType) =>
   selectedType === DEFAULT_VALUE || offer.type === selectedType;
 
 const filterByPrice = ({ offer }, selectedPrice) => {
   switch (selectedPrice) {
-    case PriceType.ANY:
+    case PRICE_TYPE.ANY:
       return true;
-    case PriceType.LOW:
-      return offer.price < PriceValue.MIDDLE;
-    case PriceType.MIDDLE:
-      return offer.price < PriceValue.HIGH && offer.price >= PriceValue.MIDDLE;
-    case PriceType.HIGH:
-      return offer.price >= PriceValue.HIGH;
+    case PRICE_TYPE.LOW:
+      return offer.price < PRICE_VALUE.MIDDLE;
+    case PRICE_TYPE.MIDDLE:
+      return offer.price < PRICE_VALUE.HIGH && offer.price >= PRICE_VALUE.MIDDLE;
+    case PRICE_TYPE.HIGH:
+      return offer.price >= PRICE_VALUE.HIGH;
     default:
       throw new Error('Неизвестное значение выбранной цены');
   }

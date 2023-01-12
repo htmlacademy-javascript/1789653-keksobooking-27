@@ -37,11 +37,11 @@ const debounce = (cb) => {
 
 const toggleFormActive = (forms, active) => {
   forms.forEach(({ element, classDisabled }) => {
+    element.classList.remove(classDisabled);
     if (!active) {
       element.classList.add(classDisabled);
-    } else {
-      element.classList.remove(classDisabled);
     }
+
     Array.from(element.children)
       .forEach((item) => {
         item.disabled = !active;

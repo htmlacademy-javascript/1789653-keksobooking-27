@@ -1,6 +1,5 @@
-import './slider.js';
-import './message.js';
-import './picture.js';
+import { priceInputElement } from './slider.js';
+import { avatarChangeElement, imageChangeElement } from './picture.js';
 import { showAlert } from './util.js';
 import { getData } from './api.js';
 import { initFilters, setActiveFormMap } from './filter.js';
@@ -41,10 +40,12 @@ const bootstrap = async () => {
     setActiveFormMap(true);
     initFilters(offers, (reduceOffers) => renderMarkers(map, reduceOffers));
   }
-
-  catch (error) {
+  catch {
     showAlert('ОЙ... Что-то пошло не так! Попробуйте перезагрузить страницу!');
   }
 };
 
 bootstrap();
+priceInputElement();
+avatarChangeElement();
+imageChangeElement();

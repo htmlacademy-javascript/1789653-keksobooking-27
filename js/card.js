@@ -1,4 +1,4 @@
-const offerTypes = {
+const OFFER_TYPES = {
   'flat': 'Квартира',
   'bungalow': 'Бунгало',
   'house': 'Дом',
@@ -16,7 +16,7 @@ const getCardList = ({ offer, author }) => {
   getCardItem.querySelector('.popup__title').textContent = offer.title;
   getCardItem.querySelector('.popup__text--address').textContent = offer.address;
   getCardItem.querySelector('.popup__text--price').textContent = `${offer.price} ₽/ночь`;
-  getCardItem.querySelector('.popup__type').textContent = offerTypes[offer.type];
+  getCardItem.querySelector('.popup__type').textContent = OFFER_TYPES[offer.type];
   getCardItem.querySelector('.popup__text--capacity').textContent = `${offer.rooms} комнаты для ${offer.guests} гостей.`;
   getCardItem.querySelector('.popup__text--time').textContent = `Заезд после ${offer.checkin}, выезд до ${offer.checkout}`;
   getCardItem.querySelector('.popup__avatar').src = author.avatar;
