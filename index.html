@@ -26,7 +26,7 @@
       <div class="map__canvas" id="map-canvas"></div>
 
       <!-- Фильтрация объявлений -->
-      <div class="map__filters-container">
+      <div class="map__filters-container map__filters--disabled">
         <form action="#" class="map__filters" autocomplete="off">
           <select name="housing-type" id="housing-type" class="map__filter">
             <option value="any" selected>Любой тип жилья</option>
@@ -81,7 +81,7 @@
     <!-- Форма объявления -->
     <section class="notice">
       <h2 class="notice__title">Ваше объявление</h2>
-      <form class="ad-form" method="post" enctype="multipart/form-data" autocomplete="off"
+      <form class="ad-form ad-form--disabled" method="post" enctype="multipart/form-data" autocomplete="off"
         action="https://27.javascript.pages.academy/keksobooking">
         <fieldset class="ad-form-header">
           <legend class="ad-form-header__title">Ваша фотография (для карты)</legend>

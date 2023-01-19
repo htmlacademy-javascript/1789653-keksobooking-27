@@ -1,5 +1,4 @@
 import { showSuccess, showError } from './message.js';
-import { toggleFormActive } from './util.js';
 import { postData } from './api.js';
 import { resetPreview } from './picture.js';
 import { resetFilter } from './filter.js';
@@ -13,12 +12,12 @@ const submitButton = adFormElement.querySelector('.ad-form__submit');
 const resetButton = adFormElement.querySelector('.ad-form__reset');
 
 
-const blockSubmitButton = () => {
+const disableUploadButton = () => {
   submitButton.disabled = true;
   submitButton.textContent = 'Опубликовываю...';
 };
 
-const unBlockSubmitButton = () => {
+const enableUploadButton = () => {
   submitButton.disabled = false;
   submitButton.textContent = 'Опубликовать';
 };
@@ -28,15 +27,6 @@ const resetForm = () => {
   resetPreview();
   resetFilter();
   resetSlider();
-};
-
-const setActiveAdForm = (active) => {
-  toggleFormActive([
-    {
-      element: adFormElement,
-      classDisabled: 'ad-form--disabled',
-    },
-  ], active);
 };
 
 const setAddressValue = ({ lat, lng }) => {
@@ -58,7 +48,7 @@ const initForm = (clearMapCb, validateFormCb) => {
     if (!validateFormCb()) {
       return;
     }
-    blockSubmitButton();
+    disableUploadButton();
     const formData = new FormData(evt.target);
 
     try {
@@ -71,8 +61,8 @@ const initForm = (clearMapCb, validateFormCb) => {
       showError(error.message);
     }
 
-    unBlockSubmitButton();
+    enableUploadButton();
   });
 };
 
-export { setActiveAdForm, setAddressValue, initForm };
+export { setAddressValue, initForm };

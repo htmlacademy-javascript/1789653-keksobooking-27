@@ -1,3 +1,5 @@
+import { validateForm } from './validation.js';
+
 const MIN = 0;
 const MAX = 100000;
 const STEP = 500;
@@ -34,15 +36,16 @@ noUiSlider.create(sliderElement, {
 });
 
 sliderElement.noUiSlider.on('update', () => {
-  priceElement.value = sliderElement.noUiSlider.get();
+  priceElement.value = sliderElement.noUiSlider.get(true);
+
+  sliderElement.noUiSlider.on('change', () => {
+    priceElement.value = sliderElement.noUiSlider.get(true);
+    validateForm(priceElement);
+  });
 });
 
 const resetSlider = () => {
   sliderElement.noUiSlider.reset();
-};
-
-const priceChangeElement = () => {
-  priceElement.placeholder = TYPES_TO_PRICES[typeElement.value];
 };
 
 const priceInputElement = () => {
@@ -54,13 +57,6 @@ const priceInputElement = () => {
         max: MAX,
       },
     });
-
-    if (priceElement.value === '') {
-      priceChangeElement();
-      typeElement.addEventListener('change', () => {
-        priceChangeElement();
-      });
-    }
   });
 };
 

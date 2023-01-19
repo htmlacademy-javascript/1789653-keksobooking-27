@@ -1,21 +1,22 @@
+import { renderMarkers, displayMap } from './map.js';
+import { initFilters } from './filter.js';
 import { priceInputElement } from './slider.js';
 import { avatarChangeElement, imageChangeElement } from './picture.js';
 import { showAlert } from './util.js';
 import { getData } from './api.js';
-import { initFilters, setActiveFormMap } from './filter.js';
-import { renderMarkers, displayMap } from './map.js';
 import { renderOfferFormValidator, validateForm } from './validation.js';
-import { setActiveAdForm, setAddressValue, initForm } from './form.js';
+import { setAddressValue, initForm } from './form.js';
 
 const FIRST_COORDINATE = {
   lat: 35.68156,
   lng: 139.78763,
 };
 
-const bootstrap = async () => {
+const mapFilterElement = document.querySelector('.map__filters-container');
+const adFormElement = document.querySelector('.ad-form');
+
+const createBootstrap = async () => {
   const mapCanvas = document.querySelector('.map__canvas');
-  setActiveFormMap(false);
-  setActiveAdForm(false);
 
   renderOfferFormValidator();
 
@@ -23,7 +24,8 @@ const bootstrap = async () => {
     mapCanvas,
     FIRST_COORDINATE,
     () => {
-      setActiveAdForm(true);
+      mapFilterElement.classList.remove('map__filters--disabled');
+      adFormElement.classList.remove('ad-form--disabled');
       setAddressValue(FIRST_COORDINATE);
     },
     ({ target }) => setAddressValue(target.getLatLng())
@@ -37,7 +39,6 @@ const bootstrap = async () => {
       setAddressValue(FIRST_COORDINATE);
     }, validateForm);
 
-    setActiveFormMap(true);
     initFilters(offers, (reduceOffers) => renderMarkers(map, reduceOffers));
   }
   catch {
@@ -45,7 +46,7 @@ const bootstrap = async () => {
   }
 };
 
-bootstrap();
+createBootstrap();
 priceInputElement();
 avatarChangeElement();
 imageChangeElement();

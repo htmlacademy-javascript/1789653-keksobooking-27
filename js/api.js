@@ -6,8 +6,8 @@ const HTTP_METHOD = {
   GET: 'GET',
 };
 
-const load = async (url, config = { HTTP_METHOD }) => {
-  const response = await fetch(url, { ...config });
+const load = async (url) => {
+  const response = await fetch(url);
 
   if (!response.ok) {
     throw new Error('Не удалось загрузить объявления');

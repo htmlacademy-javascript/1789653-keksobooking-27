@@ -29,7 +29,11 @@ const TYPES_TO_PRICES = {
   max: 100000,
 };
 
-let pristine = null;
+const pristine = new Pristine(adFormElement, {
+  classTo: 'ad-form__element',
+  errorClass: 'ad-form__element--invalid',
+  errorTextParent: 'ad-form__element',
+}, true);
 
 const getErrorMessageCapacity = () =>
   `Количество комнат вмещает ${ROOMS_TO_GUESTS[roomNumberElement.value]
@@ -77,12 +81,6 @@ const renderOfferFormValidator = () => {
   priceElement.addEventListener('change', onPriceChange);
   timeinElement.addEventListener('change', onTimeinChange);
   timeoutElement.addEventListener('change', onTimeonChange);
-
-  pristine = new Pristine(adFormElement, {
-    classTo: 'ad-form__element',
-    errorClass: 'ad-form__element--invalid',
-    errorTextParent: 'ad-form__element',
-  }, true);
 
   pristine.addValidator(
     capacityElement,

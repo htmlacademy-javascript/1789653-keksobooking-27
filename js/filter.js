@@ -1,4 +1,4 @@
-import { debounce, toggleFormActive } from './util.js';
+import { debounce } from './util.js';
 
 const NUMBER_OFFERS = 10;
 const DEFAULT_VALUE = 'any';
@@ -103,15 +103,6 @@ const initFilters = (initialOffers, cb) => {
   });
 };
 
-const setActiveFormMap = (active) => {
-  toggleFormActive([
-    {
-      element: filterMapElement,
-      classDisabled: 'map__filters--disabled',
-    },
-  ], active);
-};
-
 const resetFilter = () => filterMapElement.reset();
 
-export { initFilters, setActiveFormMap, resetFilter };
+export { initFilters, resetFilter };
