@@ -1,29 +1,26 @@
-const adForm = document.querySelector('.ad-form');
-const priceElement = adForm.querySelector('#price');
-const roomNumberElement = adForm.querySelector('#room_number');
-const capacityElement = adForm.querySelector('#capacity');
-const timeinElement = adForm.querySelector('#timein');
-const timeoutElement = adForm.querySelector('#timeout');
-const typeElement = adForm.querySelector('#type');
-const submitButton = adForm.querySelector('.ad-form__submit');
+const adFormElement = document.querySelector('.ad-form');
+const priceElement = adFormElement.querySelector('#price');
+const roomNumberElement = adFormElement.querySelector('#room_number');
+const capacityElement = adFormElement.querySelector('#capacity');
+const timeinElement = adFormElement.querySelector('#timein');
+const timeoutElement = adFormElement.querySelector('#timeout');
+const typeElement = adFormElement.querySelector('#type');
 
-let pristine = null;
-
-const roomsToGuests = {
+const ROOMS_TO_GUESTS = {
   1: ['1'],
-  2: ['2', '1'],
-  3: ['3', '2', '1'],
+  2: ['1', '2'],
+  3: ['1', '2', '3'],
   100: ['0'],
 };
 
-const guestsToRooms = {
+const GUEST_TO_ROOMS = {
   0: ['100'],
   1: ['1', '2', '3'],
   2: ['2', '3'],
   3: ['3'],
 };
 
-const typesToPrice = {
+const TYPES_TO_PRICES = {
   bungalow: 0,
   flat: 1000,
   hotel: 3000,
@@ -32,61 +29,58 @@ const typesToPrice = {
   max: 100000,
 };
 
+const pristine = new Pristine(adFormElement, {
+  classTo: 'ad-form__element',
+  errorClass: 'ad-form__element--invalid',
+  errorTextParent: 'ad-form__element',
+}, true);
+
 const getErrorMessageCapacity = () =>
-  `Количество комнат вмещает ${roomsToGuests[roomNumberElement.value]
-    .join(' или ')} гостей.`;
+  `Количество комнат вмещает ${ROOMS_TO_GUESTS[roomNumberElement.value]
+    .join(' или ')} ${(roomNumberElement.value === '1') ? 'гостя' : 'гостей'}.`;
 
 const getErrorMessageRoom = () =>
-  `Для выбранного количества гостей требуется ${guestsToRooms[capacityElement.value]
+  `Для выбранного количества гостей требуется ${GUEST_TO_ROOMS[capacityElement.value]
     .join(' или ')} комнаты`;
 
-const validateCapacity = () => {
-  roomsToGuests[roomNumberElement.value]
+const getErrorMessagePrice = () =>
+  `Минимальная стоимость для выбранного типа жилья ${TYPES_TO_PRICES[typeElement.value]} руб.`;
+
+const validateCapacity = () =>
+  ROOMS_TO_GUESTS[roomNumberElement.value]
     .includes(capacityElement.value);
-};
 
 const validePrice = (value) =>
-  value >= typesToPrice[typeElement.value] && value <= typesToPrice.max;
+  value >= TYPES_TO_PRICES[typeElement.value] && value <= TYPES_TO_PRICES.max;
 
-const getErrorMessagePrice = () =>
-  `Минимальная стоимость для выбранного типа жилья ${typesToPrice[typeElement.value]} руб.`;
-
-const onRoomToggle = () => {
+const onCapacityChange = () => {
   pristine.validate(capacityElement);
   pristine.validate(roomNumberElement);
 };
 
-const onTypeToggle = () => {
-  const minPrice = typesToPrice[typeElement.value];
-  priceElement.placeholder = minPrice;
-  priceElement.min = minPrice;
+const onTypeChange = () => {
   pristine.validate(priceElement);
 };
 
-const onPriceToggle = () =>
+const onPriceChange = () => {
   pristine.validate(priceElement);
+};
 
-const getTimeinToggle = () => {
+const onTimeinChange = () => {
   timeoutElement.value = timeinElement.value;
 };
 
-const getTimeonToggle = () => {
+const onTimeonChange = () => {
   timeinElement.value = timeoutElement.value;
 };
 
-const formVlidation = () => {
-  roomNumberElement.addEventListener('change', onRoomToggle);
-  capacityElement.addEventListener('change', onRoomToggle);
-  typeElement.addEventListener('change', onTypeToggle);
-  priceElement.addEventListener('change', onPriceToggle);
-  timeinElement.addEventListener('change', getTimeinToggle);
-  timeoutElement.addEventListener('change', getTimeonToggle);
-
-  pristine = new Pristine(adForm, {
-    classTo: 'ad-form__element',
-    errorTextParent: 'ad-form__element',
-    errorTextClass: 'ad-form__element--invalid',
-  }, true);
+const renderOfferFormValidator = () => {
+  roomNumberElement.addEventListener('change', onCapacityChange);
+  capacityElement.addEventListener('change', onCapacityChange);
+  typeElement.addEventListener('change', onTypeChange);
+  priceElement.addEventListener('change', onPriceChange);
+  timeinElement.addEventListener('change', onTimeinChange);
+  timeoutElement.addEventListener('change', onTimeonChange);
 
   pristine.addValidator(
     capacityElement,
@@ -105,12 +99,8 @@ const formVlidation = () => {
     validePrice,
     getErrorMessagePrice,
   );
-
-  adForm.addEventListener('submit', (evt) => {
-    evt.preventDefault();
-    const isValid = pristine.validate();
-    submitButton.disabled = !isValid;
-  });
 };
 
-formVlidation();
+const validateForm = () => pristine.validate();
+
+export { renderOfferFormValidator, validateForm };

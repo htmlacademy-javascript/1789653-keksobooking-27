@@ -5,6 +5,7 @@
   <meta charset="utf-8">
   <link rel="stylesheet" href="css/normalize.css">
   <link rel="stylesheet" href="css/style.css">
+  <link rel="stylesheet" href="vendor/leaflet/leaflet.css">
   <link rel="stylesheet" href="vendor/nouislider/nouislider.css">
   <link rel="shortcut icon" href="favicon.ico" type="image/x-icon">
   <title>Кексобукинг</title>
@@ -25,7 +26,7 @@
       <div class="map__canvas" id="map-canvas"></div>
 
       <!-- Фильтрация объявлений -->
-      <div class="map__filters-container">
+      <div class="map__filters-container map__filters--disabled">
         <form action="#" class="map__filters" autocomplete="off">
           <select name="housing-type" id="housing-type" class="map__filter">
             <option value="any" selected>Любой тип жилья</option>
@@ -54,7 +55,8 @@
             <option value="0">Не для гостей</option>
           </select>
           <fieldset id="housing-features" class="map__features">
-            <input type="checkbox" name="features" value="wifi" id="filter-wifi" class="map__checkbox visually-hidden">
+            <input type="checkbox" name="features" value="wifi" id="filter-wifi"
+              class="map__checkbox visually-hidden">
             <label class="map__feature map__feature--wifi" for="filter-wifi">Wi-Fi</label>
             <input type="checkbox" name="features" value="dishwasher" id="filter-dishwasher"
               class="map__checkbox visually-hidden">
@@ -79,7 +81,7 @@
     <!-- Форма объявления -->
     <section class="notice">
       <h2 class="notice__title">Ваше объявление</h2>
-      <form class="ad-form" method="post" enctype="multipart/form-data" autocomplete="off"
+      <form class="ad-form ad-form--disabled" method="post" enctype="multipart/form-data" autocomplete="off"
         action="https://27.javascript.pages.academy/keksobooking">
         <fieldset class="ad-form-header">
           <legend class="ad-form-header__title">Ваша фотография (для карты)</legend>
@@ -107,7 +109,7 @@
         </fieldset>
         <fieldset class="ad-form__element ad-form__element--wide">
           <label class="ad-form__label" for="address">Адрес (координаты)</label>
-          <input id="address" name="address" type="text" required readonly>
+          <input id="address" name="address" type="text" required>
         </fieldset>
         <fieldset class="ad-form__element">
           <label class="ad-form__label" for="type">Тип жилья</label>
@@ -121,7 +123,7 @@
         </fieldset>
         <fieldset class="ad-form__element">
           <label class="ad-form__label" for="price">Цена за ночь, руб.</label>
-          <input id="price" name="price" type="number" placeholder="5000" min="0" max="100000" required
+          <input id="price" name="price" type="number" placeholder="5000" min="0" max="100000" step="500" required
             data-pristine-required-message="Обязательное поле"
             data-pristine-max-message="Цена за ночь, 100000 руб."
           >
@@ -258,8 +260,9 @@
     </div>
   </template>
 
-  <script src="vendor/pristine/pristine.min.js"></script>
-  <script src="vendor/nouislider/nouislider.js"></script>
+  <script src="./vendor/pristine/pristine.min.js"></script>
+  <script src="./vendor/leaflet/leaflet.js"></script>
+  <script src="./vendor/nouislider/nouislider.js"></script>
   <script src="js/main.js" type="module"></script>
 </body>
 

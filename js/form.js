@@ -1,26 +1,68 @@
-const toggleFormActive = (active) => {
-  const adForm = document.querySelector('.ad-form');
-  const mapForm = document.querySelector('.map__filters');
+import { showSuccess, showError } from './message.js';
+import { postData } from './api.js';
+import { resetPreview } from './picture.js';
+import { resetFilter } from './filter.js';
+import { resetSlider } from './slider.js';
 
-  adForm.querySelectorAll('fieldset').forEach((item) => {
-    item.disabled = !active;
-  });
+const FLOAT_COORDINATE = 5;
 
-  mapForm.querySelectorAll('fieldset').forEach((item) => {
-    item.disabled = !active;
-  });
+const adFormElement = document.querySelector('.ad-form');
+const addressElement = adFormElement.querySelector('#address');
+const submitButton = adFormElement.querySelector('.ad-form__submit');
+const resetButton = adFormElement.querySelector('.ad-form__reset');
 
-  mapForm.querySelectorAll('select').forEach((item) => {
-    item.disabled = !active;
-  });
 
-  if (!active) {
-    adForm.classList.add('ad-form--disabled');
-    mapForm.classList.add('map__filters--disabled');
-  } else {
-    adForm.classList.remove('ad-form--disabled');
-    mapForm.classList.remove('map__filter--disabled');
-  }
+const disableUploadButton = () => {
+  submitButton.disabled = true;
+  submitButton.textContent = 'Опубликовываю...';
 };
 
-export { toggleFormActive };
+const enableUploadButton = () => {
+  submitButton.disabled = false;
+  submitButton.textContent = 'Опубликовать';
+};
+
+const resetForm = () => {
+  adFormElement.reset();
+  resetPreview();
+  resetFilter();
+  resetSlider();
+};
+
+const setAddressValue = ({ lat, lng }) => {
+  addressElement.value = `${lat.toFixed(FLOAT_COORDINATE)} ${lng.toFixed(FLOAT_COORDINATE)}`;
+};
+
+const initForm = (clearMapCb, validateFormCb) => {
+  addressElement.readOnly = true;
+
+  resetButton.addEventListener('click', (evt) => {
+    evt.preventDefault();
+    resetForm();
+    clearMapCb();
+  });
+
+  adFormElement.addEventListener('submit', async (evt) => {
+    evt.preventDefault();
+
+    if (!validateFormCb()) {
+      return;
+    }
+    disableUploadButton();
+    const formData = new FormData(evt.target);
+
+    try {
+      await postData(formData);
+      showSuccess();
+      clearMapCb();
+      resetForm();
+    }
+    catch (error) {
+      showError(error.message);
+    }
+
+    enableUploadButton();
+  });
+};
+
+export { setAddressValue, initForm };
