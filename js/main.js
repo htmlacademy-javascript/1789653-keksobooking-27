@@ -1,6 +1,5 @@
 import { renderMarkers, displayMap } from './map.js';
 import { initFilters } from './filter.js';
-import { priceInputElement } from './slider.js';
 import { avatarChangeElement, imageChangeElement } from './picture.js';
 import { showAlert } from './util.js';
 import { getData } from './api.js';
@@ -47,6 +46,5 @@ const createBootstrap = async () => {
 };
 
 createBootstrap();
-priceInputElement();
 avatarChangeElement();
 imageChangeElement();

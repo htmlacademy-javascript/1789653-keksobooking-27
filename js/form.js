@@ -11,7 +11,6 @@ const addressElement = adFormElement.querySelector('#address');
 const submitButton = adFormElement.querySelector('.ad-form__submit');
 const resetButton = adFormElement.querySelector('.ad-form__reset');
 
-
 const disableUploadButton = () => {
   submitButton.disabled = true;
   submitButton.textContent = 'Опубликовываю...';
