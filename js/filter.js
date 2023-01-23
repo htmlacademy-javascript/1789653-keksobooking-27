@@ -3,14 +3,14 @@ import { debounce } from './util.js';
 const NUMBER_OFFERS = 10;
 const DEFAULT_VALUE = 'any';
 
-const PRICE_TYPE = {
+const PriceType = {
   ANY: 'any',
   LOW: 'low',
   MIDDLE: 'middle',
   HIGH: 'high',
 };
 
-const PRICE_VALUE = {
+const PriceValue = {
   MIDDLE: 10000,
   HIGH: 50000,
 };
@@ -27,14 +27,14 @@ const filterByType = ({ offer }, selectedType) =>
 
 const filterByPrice = ({ offer }, selectedPrice) => {
   switch (selectedPrice) {
-    case PRICE_TYPE.ANY:
+    case PriceType.ANY:
       return true;
-    case PRICE_TYPE.LOW:
-      return offer.price < PRICE_VALUE.MIDDLE;
-    case PRICE_TYPE.MIDDLE:
-      return offer.price < PRICE_VALUE.HIGH && offer.price >= PRICE_VALUE.MIDDLE;
-    case PRICE_TYPE.HIGH:
-      return offer.price >= PRICE_VALUE.HIGH;
+    case PriceType.LOW:
+      return offer.price < PriceValue.MIDDLE;
+    case PriceType.MIDDLE:
+      return offer.price < PriceValue.HIGH && offer.price >= PriceValue.MIDDLE;
+    case PriceType.HIGH:
+      return offer.price >= PriceValue.HIGH;
     default:
       throw new Error('Неизвестное значение выбранной цены');
   }

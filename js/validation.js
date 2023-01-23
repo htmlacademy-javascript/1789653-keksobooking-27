@@ -1,3 +1,5 @@
+import { setPricePlaceholder } from './slider.js';
+
 const adFormElement = document.querySelector('.ad-form');
 const priceElement = adFormElement.querySelector('#price');
 const roomNumberElement = adFormElement.querySelector('#room_number');
@@ -59,7 +61,10 @@ const onCapacityChange = () => {
 };
 
 const onTypeChange = () => {
-  pristine.validate(priceElement);
+  setPricePlaceholder();
+  if (priceElement.value) {
+    pristine.validate(priceElement);
+  }
 };
 
 const onPriceChange = () => {

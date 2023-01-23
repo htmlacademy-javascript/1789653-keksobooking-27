@@ -13,20 +13,20 @@ const MAIN_PIN_ANCHOR_SIZE = [26, 52];
 const TILE_LAYER_LINK = 'https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png';
 const TILE_LAYER_ATTRIBUTION = '&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors';
 
-const ICON_TYPE = {
+const IconType = {
   MAIN: 'main',
   DEFAULT: 'default',
 };
 
 const createPinMarcer = (iconType) => {
   switch (iconType) {
-    case (ICON_TYPE.DEFAULT):
+    case (IconType.DEFAULT):
       return L.icon({
         iconUrl: DEFAYLT_PIN_PATH,
         iconSize: DEFAYLT_PIN_ICON_SIZE,
         iconAnchor: DEFAULT_PIT_ANCHOR_SIZE,
       });
-    case (ICON_TYPE.MAIN):
+    case (IconType.MAIN):
       return L.icon({
         iconUrl: MAIN_PIN_PATH,
         iconSize: MAIN_PIN_ICON_SIZE,
@@ -63,7 +63,7 @@ const renderMarkers = (map, offers) => {
   removeMarkers(map);
   offers.forEach((offer) => {
     const cardElement = getCardList(offer);
-    createMarker(offer.location, ICON_TYPE.DEFAULT)
+    createMarker(offer.location, IconType.DEFAULT)
       .addTo(map)
       .bindPopup(cardElement);
   });
@@ -81,7 +81,7 @@ const displayMap = (mapElement, coordinates, onLoadMap, onPinMoveEnd) => {
     .layerGroup()
     .addTo(map);
 
-  const mainPinMarker = createMarker(coordinates, ICON_TYPE.MAIN, true);
+  const mainPinMarker = createMarker(coordinates, IconType.MAIN, true);
   mainPinMarker.addTo(mainMarkerGroup);
   mainPinMarker.on('moveend', onPinMoveEnd);
 
